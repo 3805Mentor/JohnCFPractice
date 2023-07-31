@@ -38,5 +38,7 @@ object PracticeControls : Controls() {
      */
     override fun registerCommands() {
         CommandScheduler.scheduleCommand(drive.driverControlled(opMode.gamepad1))
+        gamepad1.x.pressedCommand = {PracticeClaw.open}
+        gamepad1.y.pressedCommand = {PracticeClaw.close}
     }
 }
