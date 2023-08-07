@@ -40,5 +40,9 @@ object PracticeControls : Controls() {
         CommandScheduler.scheduleCommand(drive.driverControlled(opMode.gamepad1))
         gamepad1.x.pressedCommand = {PracticeClaw.open}
         gamepad1.y.pressedCommand = {PracticeClaw.close}
+        gamepad1.dpadUp.pressedCommand = {PracticeLift.start}
+        gamepad1.dpadUp.releasedCommand = {PracticeLift.stop}
+        gamepad1.dpadDown.pressedCommand = {PracticeLift.reverse}
+        gamepad1.dpadDown.releasedCommand = {PracticeLift.stop}
     }
 }

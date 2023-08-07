@@ -22,6 +22,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import org.atomicrobotics3805.cflib.Constants.opMode
 import org.atomicrobotics3805.cflib.Command
+import org.atomicrobotics3805.cflib.parallel
 import org.atomicrobotics3805.cflib.subsystems.PowerMotor
 import org.atomicrobotics3805.cflib.subsystems.Subsystem
 import org.atomicrobotics3805.cflib.subsystems.MotorToPosition
@@ -38,6 +39,27 @@ import kotlin.math.PI
 @Config
 @Suppress("Unused", "MemberVisibilityCanBePrivate")
 object PracticeLift : Subsystem {
+    var NAME_1 = "lift1"
+    var SPEED = 1.0
+    var DIRECTION_1 = DcMotorSimple.Direction.FORWARD
+    lateinit var liftMotor1: DcMotorEx
+    val start: Command
+        get() = parallel {
+                +PowerMotor(liftMotor1, SPEED)
+        }
+    val reverse: Command
+        get() = parallel {
+            +PowerMotor(liftMotor1, -SPEED)
+        }
+    val stop: Command
+        get() = parallel {
+            +PowerMotor(liftMotor1, 0.0)
+        }
+    override fun initialize() {
+        liftMotor1 = opMode.hardwareMap.get(DcMotorEx::class.java, NAME_1)
+        liftMotor1.direction = DIRECTION_1
+    }
+
 
 
 }
