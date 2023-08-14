@@ -41,7 +41,13 @@ import kotlin.math.PI
 object PracticeLift : Subsystem {
     var NAME_1 = "lift1"
     var SPEED = 1.0
-    var DIRECTION_1 = DcMotorSimple.Direction.FORWARD
+    var DIRECTION_1 = DcMotorSimple.Direction.REVERSE
+    var HIGH_POSITION = 20
+    var LOW_POSITION = 15
+    private const val PULLEY_WIDTH = 2.0
+    private const val COUNTS_PER_REV = 28 * 13.7
+    private const val DRIVE_GEAR_REDUCTION =1
+    private const val COUNTS_PER_INCH = COUNTS_PER_REV * DRIVE_GEAR_REDUCTION / (PULLEY_WIDTH * PI)
     lateinit var liftMotor1: DcMotorEx
     val start: Command
         get() = parallel {
@@ -55,9 +61,23 @@ object PracticeLift : Subsystem {
         get() = parallel {
             +PowerMotor(liftMotor1, 0.0)
         }
+    val toBottom: Command
+        get() = parallel {
+                +MotorToPosition(liftMotor1, (0.5 * COUNTS_PER_INCH).toInt(), SPEED)
+        }
+    val toLow: Command
+        get() = parallel {
+            +MotorToPosition(liftMotor1, (LOW_POSITION * COUNTS_PER_INCH).toInt(), SPEED)
+        }
+    val toHigh: Command
+        get() = parallel {
+            +MotorToPosition(liftMotor1, (HIGH_POSITION * COUNTS_PER_INCH).toInt(), SPEED)
+        }
     override fun initialize() {
         liftMotor1 = opMode.hardwareMap.get(DcMotorEx::class.java, NAME_1)
         liftMotor1.direction = DIRECTION_1
+        liftMotor1.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
+        liftMotor1.mode = DcMotor.RunMode.RUN_USING_ENCODER
     }
 
 
