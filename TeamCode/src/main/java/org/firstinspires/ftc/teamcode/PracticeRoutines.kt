@@ -27,6 +27,10 @@ import org.atomicrobotics3805.cflib.sequential
  * commands that can be run either one at a time (sequentially) or all at once (in parallel).
  */
 object PracticeRoutines {
-
+    val myRoutine: CommandGroup
+        get() = sequential {
+            +drive.followTrajectory(PracticeTrajectoryFactory.firstTrajectory)
+            +drive.followTrajectory(PracticeTrajectoryFactory.secondTrajectory)
+        }
 
 }

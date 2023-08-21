@@ -30,6 +30,9 @@ import org.atomicrobotics3805.cflib.trajectories.TrajectoryFactory
  * https://learnroadrunner.com/trajectorybuilder-functions.html
  */
 object PracticeTrajectoryFactory : TrajectoryFactory() {
+    lateinit var startPose: Pose2d
+    lateinit var firstTrajectory: ParallelTrajectory
+    lateinit var secondTrajectory: ParallelTrajectory
 
     /**
      * Initializes the robot's start positions and trajectories. This is where the trajectories are
@@ -38,8 +41,16 @@ object PracticeTrajectoryFactory : TrajectoryFactory() {
     override fun initialize() {
         super.initialize()
         // start positions
+        startPose = Pose2d(0.0, 0.0, 0.0)
 
         // trajectories
+        firstTrajectory = drive.trajectoryBuilder(startPose)
+                .lineTo(Vector2d(30.0, 0.0))
+                .build()
+        secondTrajectory = drive.trajectoryBuilder(firstTrajectory.end())
+                .lineTo(Vector2d (60.0, 0.0))
+                .build()
+
 
     }
 }
